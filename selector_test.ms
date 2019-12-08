@@ -1,3 +1,16 @@
+----------------------------------------------------------
+----------------------------------------------------------
+--load_skinBones_of_SelectedObjects
+--Version 1_001
+--Moteki Kunio
+--Last change 191113
+--
+-- Skinに含まれる Bones をテキスト(txt)からロードする
+--1_001 テスト中
+--1_004 ファイル名からmaxファイル名を除去
+----------------------------------------------------------
+----------------------------------------------------------
+
 try (DestroyDialog selector_test) catch ()
 (
 
@@ -14,48 +27,55 @@ try (DestroyDialog selector_test) catch ()
 	script_Dir = getFilenamePath script_Path --自身のディレクトリ
 
 	--オブジェクト選択用配列
-	arrTgt = #()
-	arrClmRA = #();arrClmRB = #();arrClmRC = #();arrClmRD = #();arrClmRE = #();arrClmRF = #();arrClmRG = #();arrClmRH = #();
-	arrClmB = #()
-	arrClmLA = #();arrClmLB = #();arrClmLC = #();arrClmLD = #();arrClmLE = #();arrClmLF = #();arrClmLG = #();arrClmLH = #()
-	arrLine01 = #();arrLine02 = #();arrLine03 = #();arrLine04 = #();arrLine05 = #();
-	arrLine06 = #();arrLine07 = #();arrLine08 = #();arrLine09 = #();arrLine10 = #();
+	arrTgt = #();arrClmRA = #();arrClmRB = #();arrClmRC = #();arrClmRD = #();arrClmRE = #();arrClmRF = #();arrClmRG = #();arrClmRH = #()
+	arrClmB = #();arrClmLA = #();arrClmLB = #();arrClmLC = #();arrClmLD = #();arrClmLE = #();arrClmLF = #();arrClmLG = #();arrClmLH = #()
+	arrLine01 = #();arrLine02 = #();arrLine03 = #();arrLine04 = #();arrLine05 = #();arrLine06 = #();arrLine07 = #();arrLine08 = #();arrLine09 = #();arrLine10 = #()
 
-	loadContents = openFile (script_Dir+ "selector_test_list.txt")
-	seek LoadContents 0
-	while eof LoadContents == false do (
-		tgtBone = execute ("$'" + (readLine loadContents) + "'" )
-		--print (tgtBone.name as string)
-		if findString (tgtBone.name) "_00" == undefined do (appendIfUnique arrTgt tgtBone)
-		if findString (tgtBone.name) "_RA_" != undefined do (appendIfUnique arrClmRA tgtBone)
-		if findString (tgtBone.name) "_RB_" != undefined do (appendIfUnique arrClmRB tgtBone)
-		if findString (tgtBone.name) "_RC_" != undefined do (appendIfUnique arrClmRC tgtBone)
-		if findString (tgtBone.name) "_RD_" != undefined do (appendIfUnique arrClmRD tgtBone)
-		if findString (tgtBone.name) "_RE_" != undefined do (appendIfUnique arrClmRE tgtBone)
-		if findString (tgtBone.name) "_RF_" != undefined do (appendIfUnique arrClmRF tgtBone)
-		if findString (tgtBone.name) "_RG_" != undefined do (appendIfUnique arrClmRG tgtBone)
-		if findString (tgtBone.name) "_RH_" != undefined do (appendIfUnique arrClmRH tgtBone)
-		if findString (tgtBone.name) "_B_" != undefined do (appendIfUnique arrClmB tgtBone)
-		if findString (tgtBone.name) "_LH_" != undefined do (appendIfUnique arrClmLH tgtBone)
-		if findString (tgtBone.name) "_LG_" != undefined do (appendIfUnique arrClmLG tgtBone)
-		if findString (tgtBone.name) "_LF_" != undefined do (appendIfUnique arrClmLF tgtBone)
-		if findString (tgtBone.name) "_LE_" != undefined do (appendIfUnique arrClmLE tgtBone)
-		if findString (tgtBone.name) "_LD_" != undefined do (appendIfUnique arrClmLD tgtBone)
-		if findString (tgtBone.name) "_LC_" != undefined do (appendIfUnique arrClmLC tgtBone)
-		if findString (tgtBone.name) "_LB_" != undefined do (appendIfUnique arrClmLB tgtBone)
-		if findString (tgtBone.name) "_LA_" != undefined do (appendIfUnique arrClmLA tgtBone)
-		if findString (tgtBone.name) "_01" != undefined do (appendIfUnique arrLine01 tgtBone)
-		if findString (tgtBone.name) "_02" != undefined do (appendIfUnique arrLine02 tgtBone)
-		if findString (tgtBone.name) "_03" != undefined do (appendIfUnique arrLine03 tgtBone)
-		if findString (tgtBone.name) "_04" != undefined do (appendIfUnique arrLine04 tgtBone)
-		if findString (tgtBone.name) "_05" != undefined do (appendIfUnique arrLine05 tgtBone)
-		if findString (tgtBone.name) "_06" != undefined do (appendIfUnique arrLine06 tgtBone)
-		if findString (tgtBone.name) "_07" != undefined do (appendIfUnique arrLine07 tgtBone)
-		if findString (tgtBone.name) "_08" != undefined do (appendIfUnique arrLine08 tgtBone)
-		if findString (tgtBone.name) "_09" != undefined do (appendIfUnique arrLine09 tgtBone)
-		if findString (tgtBone.name) "_10" != undefined do (appendIfUnique arrLine10 tgtBone)
+	fn Fn_loadList listFileName arrTgt arrClmRA arrClmRB arrClmRC arrClmRD arrClmRE arrClmRF arrClmRG arrClmRH arrClmB arrClmLA arrClmLB arrClmLC arrClmLD arrClmLE arrClmLF arrClmLG arrClmLH arrLine01 arrLine02 arrLine03 arrLine04 arrLine05 arrLine06 arrLine07 arrLine08 arrLine09 arrLine10 =
+	(
+		print listFileName
+		--リスト開放
+		free arrTgt;free arrClmRA;free arrClmRB;free arrClmRC;free arrClmRD;free arrClmRE;free arrClmRF;free arrClmRG;free arrClmRH
+		free arrClmB;free arrClmLA;free arrClmLB;free arrClmLC;free arrClmLD;free arrClmLE;free arrClmLF;free arrClmLG;free arrClmLH
+		free arrLine01;free arrLine02;free arrLine03;free arrLine04;free arrLine05;free arrLine06;free arrLine07;free arrLine08;free arrLine09;free arrLine10
+
+		--リスト化
+		loadContents = openFile listFileName
+		seek LoadContents 0
+		while eof LoadContents == false do (
+			tgtBone = execute ("$'" + (readLine loadContents) + "'" )
+			--print (tgtBone.name)
+			if findString (tgtBone.name) "_00" == undefined do (appendIfUnique arrTgt tgtBone)
+			if findString (tgtBone.name) "_RA_" != undefined do (appendIfUnique arrClmRA tgtBone)
+			if findString (tgtBone.name) "_RB_" != undefined do (appendIfUnique arrClmRB tgtBone)
+			if findString (tgtBone.name) "_RC_" != undefined do (appendIfUnique arrClmRC tgtBone)
+			if findString (tgtBone.name) "_RD_" != undefined do (appendIfUnique arrClmRD tgtBone)
+			if findString (tgtBone.name) "_RE_" != undefined do (appendIfUnique arrClmRE tgtBone)
+			if findString (tgtBone.name) "_RF_" != undefined do (appendIfUnique arrClmRF tgtBone)
+			if findString (tgtBone.name) "_RG_" != undefined do (appendIfUnique arrClmRG tgtBone)
+			if findString (tgtBone.name) "_RH_" != undefined do (appendIfUnique arrClmRH tgtBone)
+			if findString (tgtBone.name) "_B_" != undefined do (appendIfUnique arrClmB tgtBone)
+			if findString (tgtBone.name) "_LH_" != undefined do (appendIfUnique arrClmLH tgtBone)
+			if findString (tgtBone.name) "_LG_" != undefined do (appendIfUnique arrClmLG tgtBone)
+			if findString (tgtBone.name) "_LF_" != undefined do (appendIfUnique arrClmLF tgtBone)
+			if findString (tgtBone.name) "_LE_" != undefined do (appendIfUnique arrClmLE tgtBone)
+			if findString (tgtBone.name) "_LD_" != undefined do (appendIfUnique arrClmLD tgtBone)
+			if findString (tgtBone.name) "_LC_" != undefined do (appendIfUnique arrClmLC tgtBone)
+			if findString (tgtBone.name) "_LB_" != undefined do (appendIfUnique arrClmLB tgtBone)
+			if findString (tgtBone.name) "_LA_" != undefined do (appendIfUnique arrClmLA tgtBone)
+			if findString (tgtBone.name) "_01" != undefined do (appendIfUnique arrLine01 tgtBone)
+			if findString (tgtBone.name) "_02" != undefined do (appendIfUnique arrLine02 tgtBone)
+			if findString (tgtBone.name) "_03" != undefined do (appendIfUnique arrLine03 tgtBone)
+			if findString (tgtBone.name) "_04" != undefined do (appendIfUnique arrLine04 tgtBone)
+			if findString (tgtBone.name) "_05" != undefined do (appendIfUnique arrLine05 tgtBone)
+			if findString (tgtBone.name) "_06" != undefined do (appendIfUnique arrLine06 tgtBone)
+			if findString (tgtBone.name) "_07" != undefined do (appendIfUnique arrLine07 tgtBone)
+			if findString (tgtBone.name) "_08" != undefined do (appendIfUnique arrLine08 tgtBone)
+			if findString (tgtBone.name) "_09" != undefined do (appendIfUnique arrLine09 tgtBone)
+			if findString (tgtBone.name) "_10" != undefined do (appendIfUnique arrLine10 tgtBone)
+		)
+		close LoadContents
 	)
-	close LoadContents
 
 	--確認
 -- 	print "arrTgt"
@@ -77,6 +97,8 @@ try (DestroyDialog selector_test) catch ()
 -- 	print"arrClmB"
 -- 	print arrClmB
 
+	Fn_loadList (script_Dir+ "selector_test_list.txt") arrTgt arrClmRA arrClmRB arrClmRC arrClmRD arrClmRE arrClmRF arrClmRG arrClmRH arrClmB arrClmLA arrClmLB arrClmLC arrClmLD arrClmLE arrClmLF arrClmLG arrClmLH arrLine01 arrLine02 arrLine03 arrLine04 arrLine05 arrLine06 arrLine07 arrLine08 arrLine09 arrLine10
+
 	local btnPos = [0,10]
 	local addColum = [20,0]
 	local addRow = [0,22]
@@ -84,9 +106,11 @@ try (DestroyDialog selector_test) catch ()
 	local iSizeB = [8,8] --ボタンワイド
 	local iconPos = [2,4]
 
-	rollout selector_test "Testing Selector"
+	rollout selector_test "Select Bones"
 	(
-		--ヘッダー
+		--切り替え
+		button btn_bonePtToggle "Select Pt" pos:[355,0]
+		--ヘッド
 		button btn_ALL "ALL" acos:11 pos:(addRow+[5,0])
 
 		button btn_RA "RA" width:iSize pos:(addRow+addColum*3)
@@ -307,6 +331,19 @@ try (DestroyDialog selector_test) catch ()
 		button btn_LB10 iconName:" " iconSize:iSizeB pos:(iconPos+addRow*mlt10+addColum*18)
 		button btn_LA10 iconName:" " iconSize:iSizeB pos:(iconPos+addRow*mlt10+addColum*19)
 
+		--切り替え
+		on btn_bonePtToggle pressed do
+		(
+			if (btn_bonePtToggle.caption == "Select Pt") then (
+				Fn_loadList (script_Dir+ "selector_test_list_Pt.txt") arrTgt arrClmRA arrClmRB arrClmRC arrClmRD arrClmRE arrClmRF arrClmRG arrClmRH arrClmB arrClmLA arrClmLB arrClmLC arrClmLD arrClmLE arrClmLF arrClmLG arrClmLH arrLine01 arrLine02 arrLine03 arrLine04 arrLine05 arrLine06 arrLine07 arrLine08 arrLine09 arrLine10
+				btn_bonePtToggle.caption = "Select Bone"
+				selector_test.title =  "Select Points"
+			) else (
+				Fn_loadList (script_Dir+ "selector_test_list.txt") arrTgt arrClmRA arrClmRB arrClmRC arrClmRD arrClmRE arrClmRF arrClmRG arrClmRH arrClmB arrClmLA arrClmLB arrClmLC arrClmLD arrClmLE arrClmLF arrClmLG arrClmLH arrLine01 arrLine02 arrLine03 arrLine04 arrLine05 arrLine06 arrLine07 arrLine08 arrLine09 arrLine10
+				btn_bonePtToggle.caption = "Select Pt"
+				selector_test.title =  "Select Bones"
+			)
+		)
 		--オール
 		on btn_ALL pressed do Fn_toggleSelection arrTgt
 		--縦のグループ
