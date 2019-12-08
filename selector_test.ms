@@ -1,13 +1,14 @@
 ----------------------------------------------------------
 ----------------------------------------------------------
---load_skinBones_of_SelectedObjects
---Version 1_001
+--selector_test.ms
+--Version 003
 --Moteki Kunio
---Last change 191113
+--Last change 191208
 --
--- Skinに含まれる Bones をテキスト(txt)からロードする
---1_001 テスト中
---1_004 ファイル名からmaxファイル名を除去
+--Bones or Points Selector
+--001 for test
+--002 It's complete, for the moment
+--003 Add description
 ----------------------------------------------------------
 ----------------------------------------------------------
 
