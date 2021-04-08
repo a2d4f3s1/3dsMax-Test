@@ -25,9 +25,9 @@
 		
 		
 	--選択セットの名前を試す
-		NewName = "MyNewSet1"
+		NewName = getFilenameFile LoadedFile
 		for i = 1 to 1000 do (
-			if selectionSets[NewName] != undefined  do NewName = ("MyNewSet" + i as string)
+			if selectionSets[NewName] != undefined  do NewName = (NewName + i as string)
 			)
 			
 	--選択セット保存する？
