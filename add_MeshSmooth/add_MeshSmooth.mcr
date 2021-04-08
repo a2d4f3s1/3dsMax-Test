@@ -17,7 +17,7 @@
 		checkbox 'chk_ren_smooth' "" pos:[30,87] width:26 height:21 align:#left
 		spinner 'spn_ren_smoothness' "Smoothness:" pos:[60,90] width:128 height:16 align:#right range:[0.0,1.0,1.0]
 		
-		checkbox 'chk_isoDisplay' "ISO Line Display" pos:[30,110] width:127 height:27 align:#left checked:true
+		checkbox 'chk_isoDisplay' "ISO Line Display" pos:[30,110] width:127 height:27 align:#left
 		
 		label 'lbl_surface parameters' "Surface Parameters" pos:[10,145] width:128 height:21 align:#left
 		checkbox 'chk_smooth_result' "Smooth Result" pos:[30,160] width:128 height:18 align:#left
