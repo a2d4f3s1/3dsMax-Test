@@ -1,4 +1,6 @@
-﻿
+﻿--Scene Switch forMRN
+--210415.01
+
 (
 	--Fn 数を比較してフラグを返す
 	fn fn_triState mainNum slaveNum =
@@ -18,21 +20,22 @@
 	--エフェクトのP4ラインの現在の状態
 	FxLineCount = 0 --Pencil__4_Line の数
 	FxLineCheckCount = 0 --Pencil__4_Line の有効数
-	ExLineTriState = 0 --フラグ
+	FxLineElementCount = 0 --Pencil__4_Line のRenderElementsOnlyの有効数
+	ExLineTriState = 0 --フラグ（アクティブ）
+	ExLineElementTriState = 0 --フラグ（レンダーエレメントのみ）
 
 	for i = 1 to numEffects do
 	(
 		tempFX = getEffect i
 		if (classof tempFX == Pencil__4_Line) do (
 			FxLineCount +=1
-			if (IsActive tempFX  == true) do
-			(
-				FxLineCheckCount +=1
-			)
+			if (IsActive tempFX == true) do ( FxLineCheckCount +=1)
+			if (tempFX.RenderElementOnly == true) do  ( FxLineElementCount +=1)
 		)
 	)
 
 	ExLineTriState = fn_triState FxLineCount FxLineCheckCount --関数"fn_triState"
+	ExLineElementTriState = fn_triState FxLineCount FxLineElementCount --関数"fn_triState"
 
 	--レンダーエレメントの全体の状態
 	re = maxOps.GetCurRenderElementMgr() -- get the current render element manager
@@ -63,12 +66,14 @@
 
 	--ロールアウト
 	try DestroyDialog Scene_Switch catch ()
-	rollout Scene_Switch "Untitled" width:239 height:134
+	rollout Scene_Switch "Scene Switch forMRN" width:239 height:134
 	(
-		checkbox 'chk_LineActive' "Effects P4Line Active" pos:[10,10] width:200 height:30 align:#left triState:ExLineTriState
-		checkbox 'chk_REActive' "RenderElements Active" pos:[10,50] width:200 height:30 align:#left triState:reActive
-		checkbox 'chk_NoseLineHide' "NoseLineObj Hide" pos:[10,90] width:200 height:30 align:#left triState:TgtObjsTriState
-		on chk_LineActive changed state do --Effects Line Active
+		checkbox 'chk_LineActive' "Effects P4Line Active" pos:[10,10] width:200 height:20 align:#left triState:ExLineTriState
+		checkbox 'chk_LineElementOnly' "Effects P4Line RenderElemnt only" pos:[30,40] width:200 height:20 align:#left triState:ExLineElementTriState
+		checkbox 'chk_REActive' "RenderElements Active" pos:[10,70] width:200 height:20 align:#left triState:reActive
+		checkbox 'chk_NoseLineHide' "NoseLineObj Hide" pos:[10,100] width:200 height:20 align:#left triState:TgtObjsTriState
+		--Effects Line Active
+		on chk_LineActive changed state do
 		(
 			for i = 1 to numEffects do
 			(
@@ -78,12 +83,25 @@
 				)
 			)
 		)
-			on chk_REActive changed state do --Render Elements Active
+		--Effects Line Render Elements Only
+		on chk_LineElementOnly changed state do
+		(
+			for i = 1 to numEffects do
+			(
+				tempFX = getEffect i
+				if (classof tempFX == Pencil__4_Line) do (
+					tempFX.RenderElementOnly = state
+				)
+			)
+		)
+		--Render Elements Active
+		on chk_REActive changed state do
 		(
 			re.SetElementsActive state
 			renderSceneDialog.update()
 		)
-			on chk_NoseLineHide changed state do --NoseLineObj Hide
+		--NoseLineObj Hide
+		on chk_NoseLineHide changed state do
 		(
 			for i = 1 to TgtObjs.count do
 			(
