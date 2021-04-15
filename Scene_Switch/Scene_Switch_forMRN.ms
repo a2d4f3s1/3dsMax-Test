@@ -1,0 +1,95 @@
+﻿
+(
+	--Fn 数を比較してフラグを返す
+	fn fn_triState mainNum slaveNum =
+	(
+		TriState = 0
+		if slaveNum == 0 then --状態判定
+		(
+			TriState = 0
+		) else if (slaveNum == mainNum) then (
+			TriState = 1
+		) else (
+			TriState = 2
+		)
+		TriState -- 結果
+	)
+
+	--エフェクトのP4ラインの現在の状態
+	FxLineCount = 0 --Pencil__4_Line の数
+	FxLineCheckCount = 0 --Pencil__4_Line の有効数
+	ExLineTriState = 0 --フラグ
+
+	for i = 1 to numEffects do
+	(
+		tempFX = getEffect i
+		if (classof tempFX == Pencil__4_Line) do (
+			FxLineCount +=1
+			if (IsActive tempFX  == true) do
+			(
+				FxLineCheckCount +=1
+			)
+		)
+	)
+
+	ExLineTriState = fn_triState FxLineCount FxLineCheckCount --関数"fn_triState"
+
+	--レンダーエレメントの全体の状態
+	re = maxOps.GetCurRenderElementMgr() -- get the current render element manager
+	reActive = re.GetElementsActive() as integer --フラグ
+
+
+	--特定パーツの表示/非表示
+	TgtObjNames = #("MRN_mesh_NoseLine_Generator","ICK_mesh_NoseLine_Generator")
+	TgtObjs = #()
+	TbtObjHideCount = 0 --非表示数
+	TgtObjsTriState = 0 --フラグ
+	--特定パーツの取得
+	for TmpGeo in geometry do
+	(
+		for i = 1 to TgtObjNames.count do
+		(
+			if TmpGeo.name == TgtObjNames[i] do (append TgtObjs TmpGeo)
+		)
+	)
+	--特定パーツの非表示状態を比較
+	for i = 1 to TgtObjs.count do
+	(
+		if TgtObjs[i].isHiddenInVpt do TbtObjHideCount +=1
+	)
+
+	TgtObjsTriState = fn_triState TgtObjs.count TbtObjHideCount --関数"fn_triState"
+
+
+	--ロールアウト
+	try DestroyDialog Scene_Switch catch ()
+	rollout Scene_Switch "Untitled" width:239 height:134
+	(
+		checkbox 'chk_LineActive' "Effects P4Line Active" pos:[10,10] width:200 height:30 align:#left triState:ExLineTriState
+		checkbox 'chk_REActive' "RenderElements Active" pos:[10,50] width:200 height:30 align:#left triState:reActive
+		checkbox 'chk_NoseLineHide' "NoseLineObj Hide" pos:[10,90] width:200 height:30 align:#left triState:TgtObjsTriState
+		on chk_LineActive changed state do --Effects Line Active
+		(
+			for i = 1 to numEffects do
+			(
+				tempFX = getEffect i
+				if (classof tempFX == Pencil__4_Line) do (
+					setActive tempFX state
+				)
+			)
+		)
+			on chk_REActive changed state do --Render Elements Active
+		(
+			re.SetElementsActive state
+			renderSceneDialog.update()
+		)
+			on chk_NoseLineHide changed state do --NoseLineObj Hide
+		(
+			for i = 1 to TgtObjs.count do
+			(
+				TgtObjs[i].isHidden = state
+			)
+		)
+	)
+	CreateDialog Scene_Switch
+)
