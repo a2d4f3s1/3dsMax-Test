@@ -91,6 +91,8 @@
 			--Effects Line Render Elements Only
 			on chk_LineElementOnly changed state do
 			(
+				aniState = animButtonState
+
 				for i = 1 to numEffects do
 				(
 					tempFX = getEffect i
@@ -99,9 +101,13 @@
 					)
 				)
 				if state == false then (
+					if aniState == true do (animButtonState = false)
 					backgroundColor = color 64 64 64
+					if aniState == true do (animButtonState = true)
 				) else (
+					if aniState == true do (animButtonState = false)
 					backgroundColor = color 0 0 0
+					if aniState == true do (animButtonState = true)
 				)
 			)
 			--Render Elements Active
