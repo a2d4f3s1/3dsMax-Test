@@ -109,6 +109,7 @@
 					backgroundColor = color 0 0 0
 					if aniState == true do (animButtonState = true)
 				)
+				redrawViews()
 			)
 			--Render Elements Active
 			on chk_REActive changed state do
