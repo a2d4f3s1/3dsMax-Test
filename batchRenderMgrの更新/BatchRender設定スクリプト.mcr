@@ -22,9 +22,9 @@
 		format "setNames = %\n" setNames
 		format "setPath = %\n" setPath
 		--pngの設定
-		pngio.setType #true48
-		pngio.setAlpha false
-		pngio.setInterlaced true
+		pngio.setType #true24
+		pngio.setAlpha true
+		pngio.setInterlaced false
 		--バッチあたり関連
 		local loopCount=0, k=0
 		
