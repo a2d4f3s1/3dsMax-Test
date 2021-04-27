@@ -47,7 +47,7 @@
 
 
 		--特定パーツの表示/非表示
-		TgtObjNames = #("MRN_mesh_NoseLine_Generator","marin_mesh_hand_line","ICK_mesh_NoseLine_Generator","ICK_mesh_hand_line")
+		TgtObjNames = #("MRN_mesh_NoseLine_Generator","marin_mesh_hand_line","marin_mesh_face_noseSD","ICK_mesh_NoseLine_Generator","ICK_mesh_hand_line","ICK_mesh_face_noseSD","ICK_mesh_skirt_pattern")
 		TgtObjs = #()
 		TbtObjHideCount = 0 --非表示数
 		TgtObjsTriState = 0 --フラグ
