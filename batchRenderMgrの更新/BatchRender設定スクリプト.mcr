@@ -13,14 +13,17 @@
 	※ ライン用のバッチも一緒に作られちゃう作りなので捨てて下さい
 	※ たまにエラーでMax落ちるので保存してから実行がおすすめ
 	*/
+	actionMan.executeAction -43434444 "4096"
 	(
 		clearListener()--リスナーのクリア
 		--書き出し要素設定
-		local setNames = #("CHA_col","CHA_line","CHA_maskParts","CHA_maskEmission","CHA_maskEye","CHA_Normal","CHA_wxp","WPN_col","WPN_line","WPN_mask")
-		local setPath = @"X:\imarine\05_mv#3\10_Model\imarine3\test_Rendering\210421"--初期値
+		local setNames = #("CHA_col","CHA_line","CHA_maskParts","CHA_maskEmission","CHA_maskEye","CHA_Normal")
+		local setNamesMRN = #("MRN_col","MRN_line","MRN_maskParts","MRN_maskEmission","MRN_maskEye","MRN_Normal")
+		local setNamesICK = #("ICK_col","ICK_line","ICK_maskParts","ICK_maskEye","ICK_Normal")
+		local setPath = @"X:\imarine\05_mv#3\temp"--初期値
 		local StartTime, EndTime, FrameWidth, FrameHeight, PixelAspect, PickCamera --その他パラメーター
-		format "setNames = %\n" setNames
-		format "setPath = %\n" setPath
+		--format "setNames = %\n" setNames
+		--format "setPath = %\n" setPath
 		--pngの設定
 		pngio.setType #true24
 		pngio.setAlpha true
@@ -35,6 +38,7 @@
 			format "Run fn_CreateBatch\n"
 			for i = 1 to setNames.count do (
 				newBatch = batchRenderMgr.CreateView PickCamera --新しいバッチの作成(PickCameraを使って)
+				newBatch.enabled = false
 				newBatch.overridePreset = True --上書き"ON"
 				newBatch.startFrame = StartTime --その開始フレーム
 				newBatch.endFrame = EndTime --その終了フレーム
@@ -97,6 +101,7 @@
 			spinner 'spn_PxAspect' "Pixel Axpect: " type:#float scale:0.1 range:[0.001,1000,1] pos:[100,110] width:80 height:20 align:#right
 			pickbutton 'pbtn_Camera' "Pick Camera" pos:[420,48] width:400 height:20 align:#left filter:Fn_Camera_filt 
 			checkbox 'chk_Old_Clear' "Old Batch Clear" pos:[240,120] width:100 height:20 align:#left
+			radiobuttons 'ChaType' "Charactor Type" labels:#("CHA", "MRN", "ICK") pos:[420,80] columns:1
 			button 'btn_Run' "Run ! !" pos:[630,110] width:220 height:35 align:#left
 			
 			--editText 'edt_Path'
@@ -122,6 +127,13 @@
 					clearListener()--リスナーのクリア
 					Fn_Close_BatchRender() --batchRenderMgrを閉じる
 					print "btn_Run pressed"
+					
+					--キャラタイプを再設定
+					case ChaType.state of (
+						1: setNames = setNames
+						2: setNames = setNamesMRN
+						3: setNames = setNamesICK
+					)
 					
 					--ロールアウトのパラメーターを上位の変数に
 					setNames = setNames
