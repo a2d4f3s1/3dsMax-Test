@@ -1,11 +1,20 @@
+/*
+Discription "Reset User Properties"
+ver 002
+*/
 macroScript ResetUserProp
 	category:"Scripts"
 	buttonText:"ResetUP"
-	toolTip:"ResetUserProp"
+	toolTip:"Reset User Properties v002"
 (
-	for i in selection do
+	if selection.count then
 	(
-		setUserPropBuffer i ""
-		)
-	messageBox "Reset \"User Defined\""
+			for i in selection do
+		(
+			setUserPropBuffer i ""
+			)
+		messageBox "Reset \"User Defined\""
+	) else (
+		messageBox "Please select targets."
+	)
 )
